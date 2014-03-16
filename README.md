@@ -33,12 +33,12 @@ None, currently.
 Simply drag and drop files and directories to the icon of `CmdThere.exe`.
 It is possible to drag and drop more than one file or directory.
 
-![drag1.png](https://raw.github.com/caglartoklu/cmdthere/CmdThere/img/drag1.png)
+![drag1.png](https://raw.github.com/caglartoklu/cmdthere/master/CmdThere/img/drag1.png)
 
 In this case, CmdThere will extract the unique directories of all parameters,
 and open command windows are required.
 
-![cmdexes.png](https://raw.github.com/caglartoklu/cmdthere/CmdThere/img/cmdexes.png)
+![cmdexes.png](https://raw.github.com/caglartoklu/cmdthere/master/CmdThere/img/cmdexes.png)
 
 If the item is a directory, it will be used as it is.
 If it is a file, the directory containing it will be used.
