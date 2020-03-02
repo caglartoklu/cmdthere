@@ -13,8 +13,6 @@ SUB Main
     _TITLE "CmdThere"
     ' _SCREENHIDE
 
-    ' TODO: 6 if there is no parameter, open a default shell.
-
     DIM count AS INTEGER
     DIM i AS INTEGER
     DIM candidate AS STRING
