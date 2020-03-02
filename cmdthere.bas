@@ -1,19 +1,24 @@
 OPTION _EXPLICIT
 
+
+$EXEICON:'.\CmdThere.ico'
+
+
+
 Main
 ' TestMain
 
 
 SUB Main
     _TITLE "CmdThere"
-    _SCREENHIDE
+    ' _SCREENHIDE
 
     ' TODO: 6 if there is no parameter, open a default shell.
 
     DIM count AS INTEGER
     DIM i AS INTEGER
     DIM candidate AS STRING
-    DIM itsDirectory AS STRING
+    DIM found AS INTEGER
 
     count = _COMMANDCOUNT
 
@@ -27,16 +32,24 @@ SUB Main
             ' this is a file.
             ' extract its directory name.
             candidate = ExtractDirectoryName$(candidate)
+            found = found + 1
         END IF
 
         ' TODO: 6 if a directory is duplicated, do not open a shell for it.
 
         IF _DIREXISTS(candidate) THEN
+            ' this is a directory.
+            ' use it as it is.
             PRINT (candidate)
             CHDIR (candidate)
-            SHELL _DONTWAIT BuildShellCommand$(candidate)
+            SHELL _DONTWAIT BuildShellCommand$
+            found = found + 1
         END IF
     NEXT
+
+    IF found = 0 THEN
+        CALL ProcessNoParameter
+    END IF
 
     ' passes "press any key to continue"
     SYSTEM
@@ -48,13 +61,44 @@ SUB TestMain
 END SUB
 
 
+SUB ShowTitle (title AS STRING)
+    DIM missingCount AS INTEGER
+    DIM missing AS STRING
+
+    missingCount = 79 - LEN(title)
+    missing = STRING$(missingCount, " ")
+    COLOR 15, 1
+    PRINT " " + title + missing
+END SUB
+
+
+SUB ProcessNoParameter
+    CALL ShowTitle("CmdThere")
+
+    COLOR 7, 0
+    PRINT
+    PRINT "Usage:"
+    PRINT "Drag and drop directories and files to CmdThere."
+    PRINT "It will open cmd.exe instances."
+    PRINT "If the items are files, cmd.exe instances will be opened to its containing directories."
+    PRINT
+
+    PRINT "Do you want to open a default shell? [y]/n"
+    DIM result AS STRING
+    result = YesOrNo$
+    IF result = "yes" THEN
+        SHELL _DONTWAIT BuildShellCommand$
+    END IF
+END SUB
+
+
 FUNCTION ExtractDirectoryName$ (fileName AS STRING)
     ' Extracts the path before the path separator and returns it.
     DIM sep AS STRING
     sep = PathSeparator$
 
     DIM lastPosition AS INTEGER
-    lastPosition = InStrLast(fileName, sep)
+    lastPosition = _INSTRREV(fileName, sep)
 
     DIM dirName AS STRING
     dirName = LEFT$(fileName, lastPosition)
@@ -81,31 +125,38 @@ FUNCTION StrUntil$ (haystack AS STRING, needle AS STRING)
 END FUNCTION
 
 
-FUNCTION InStrLast% (haystack AS STRING, needle AS STRING)
-    ' InStr function, but returns the last index instead of the first one.
-    ' if the string is not found, -1 is returned.
+FUNCTION TRIM$ (needle$)
+    TRIM$ = LTRIM$(RTRIM$(needle$))
+END FUNCTION
 
-    ' Examples:
-    'PRINT PathSeparator$
-    'PRINT (InStrLast%("abcxa", "x")) ' 4
-    'PRINT (InStrLast%("xabcxa", "x")) '5
-    'PRINT (InStrLast%("xabca", "x")) '1
-    'PRINT (InStrLast%("xaxxbcaxx", "xx")) '8
-    'PRINT (InStrLast%("xaxxbcaxxaa", "xx")) '8
-    'PRINT (InStrLast%("---", "x")) '-1
 
-    DIM startPosition AS INTEGER
-    DIM i AS INTEGER
-    DIM temp AS STRING
-    DIM lastPosition AS INTEGER
-    lastPosition = -1
-    FOR i = 1 TO LEN(haystack)
-        temp = MID$(haystack, i, LEN(needle))
-        IF temp = needle THEN
-            lastPosition = i
-        END IF
-    NEXT
-    InStrLast% = lastPosition
+SUB PressAnyKey
+    ' Spin-waits until a key is pressed.
+    DO
+        ' wait for a second
+        SLEEP 1
+    LOOP UNTIL INKEY$ <> ""
+END SUB
+
+
+FUNCTION YesOrNo$
+    ' Returns "yes" or "no"
+    ' Spin-waits until a key is pressed.
+    DIM key1 AS STRING
+    DIM result AS STRING
+    DO
+        ' wait for a second
+        SLEEP 1
+        key1 = TRIM$(LCASE$(INKEY$))
+    LOOP UNTIL key1 <> ""
+    IF key1 = "y" THEN
+        result = "yes"
+    ELSEIF ASC(key1) = 13 THEN
+        result = "yes"
+    ELSE
+        result = "no"
+    END IF
+    YesOrNo$ = result
 END FUNCTION
 
 
@@ -125,7 +176,7 @@ FUNCTION DetectOs$ ()
 END FUNCTION
 
 
-FUNCTION BuildShellCommand$ (directoryName AS STRING)
+FUNCTION BuildShellCommand$
     ' Returns the shell command to use.
     ' Note that the strings in BuildShellCommand$ and DetectOs$()
     ' must be compatible.
