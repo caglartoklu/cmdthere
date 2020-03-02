@@ -25,8 +25,6 @@ None, currently.
 # Tools and Libraries Used
 - [QB64](http://www.qb64.net/), QuickBasic 4.5 compatible compiler which supports Windows, Linux and Mac OS X.
 
-- [XN Resource Editor Portable](https://portableapps.com/apps/utilities/xn_resource_editor_portable) to put the `.ico` file into the Windows `.exe` file.
-
 
 # FAQ
 
