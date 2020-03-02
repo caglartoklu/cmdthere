@@ -202,7 +202,7 @@ FUNCTION PathSeparator$ ()
     DIM result AS STRING
     result = "/" ' this is the default.
     IF DetectOs$ = "windows" THEN
-        result = "\"
+        result = CHR$(34)
     END IF
     PathSeparator$ = result
 END FUNCTION
