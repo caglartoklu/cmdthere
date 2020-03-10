@@ -8,6 +8,7 @@ on the target directory.
 The target directory is either the directory dragged and dropped,
 or the directory containing the corresponding file.
 
+![CmdThere_demo_01](https://user-images.githubusercontent.com/2071639/76356603-458d8b80-6327-11ea-8e57-c784fdd364ca.gif)
 
 
 # Installation
