@@ -3,6 +3,7 @@ OPTION _EXPLICIT
 
 $EXEICON:'.\CmdThere.ico'
 
+CONST LOG_FILE_NAME = "CmdThere.log"
 
 
 Main
@@ -30,12 +31,10 @@ SUB Main
             ' this is a file.
             ' extract its directory name.
             candidate = ExtractDirectoryName$(candidate)
+            CHDIR (candidate)
+            SHELL _DONTWAIT BuildShellCommand$
             found = found + 1
-        END IF
-
-        ' TODO: 6 if a directory is duplicated, do not open a shell for it.
-
-        IF _DIREXISTS(candidate) THEN
+        ELSEIF _DIREXISTS(candidate) THEN
             ' this is a directory.
             ' use it as it is.
             PRINT (candidate)
@@ -77,9 +76,9 @@ SUB ProcessNoParameter
     PRINT
     PRINT "Usage:"
     PRINT "Drag and drop directories and files to CmdThere."
-    PRINT "It will open cmd.exe instances."
+    PRINT "It will open cmd.exe instances in those directories."
     PRINT "If the items are files, cmd.exe instances will be opened to its containing directories."
-    PRINT
+    PRINT "You can drag and drop multiples files and directories."
 
     PRINT "Do you want to open a default shell? [y]/n"
     DIM result AS STRING
@@ -200,7 +199,18 @@ FUNCTION PathSeparator$ ()
     DIM result AS STRING
     result = "/" ' this is the default.
     IF DetectOs$ = "windows" THEN
-        result = CHR$(34)
+        result = CHR$(92)
     END IF
     PathSeparator$ = result
 END FUNCTION
+
+
+SUB LogToFile (text AS STRING)
+    ' CALL LogToFile("started")
+    ' CONST LOG_FILE_NAME = "CmdThere.log"
+    DIM handle AS LONG
+    handle = FREEFILE
+    OPEN LOG_FILE_NAME FOR APPEND AS #handle
+    PRINT #handle, text
+    CLOSE #handle
+END SUB
