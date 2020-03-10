@@ -14,8 +14,10 @@ or the directory containing the corresponding file.
 # Installation
 No need to install, the package is portable.
 Simply extract the package to a directory of your choice,
-and then create a shortcut on your Desktop.
+and then create a shortcut on your Desktop or SendTo folder.
 Then it will be ready to drag and drop files and directories.
+
+Currently it is Windows only, but Linux and Mac support will come.
 
 
 # Configuration
@@ -24,7 +26,7 @@ None, currently.
 
 
 # Tools and Libraries Used
-- [QB64](http://www.qb64.net/), QuickBasic 4.5 compatible compiler which supports Windows, Linux and Mac OS X.
+- [QB64](http://www.qb64.net/), QuickBasic 4.5 compatible compiler and IDE.
 
 
 # FAQ
