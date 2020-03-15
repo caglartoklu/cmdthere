@@ -122,11 +122,6 @@ FUNCTION StrUntil$ (haystack AS STRING, needle AS STRING)
 END FUNCTION
 
 
-FUNCTION TRIM$ (needle$)
-    TRIM$ = LTRIM$(RTRIM$(needle$))
-END FUNCTION
-
-
 SUB PressAnyKey
     ' Spin-waits until a key is pressed.
     DO
@@ -144,7 +139,7 @@ FUNCTION YesOrNo$
     DO
         ' wait for a second
         SLEEP 1
-        key1 = TRIM$(LCASE$(INKEY$))
+        key1 = _TRIM$(LCASE$(INKEY$))
     LOOP UNTIL key1 <> ""
     IF key1 = "y" THEN
         result = "yes"
